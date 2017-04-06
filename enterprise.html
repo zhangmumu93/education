@@ -1,0 +1,484 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>智联教育-企业内训</title>
+<link rel="stylesheet" href="css/default.css" />
+<link rel="stylesheet" href="css/index.css" />
+<script type="text/javascript" src="js/jquery.js" ></script>
+<script type="text/javascript" src="js/index.js" ></script>
+<script type="text/javascript" src="js/jquery.superslide.2.1.1.js" ></script>
+<script type="text/javascript">
+jQuery.fn.float= function(settings){
+	if(typeof settings == "object"){
+		settings = jQuery.extend({
+			//延迟
+			delay : 1000,
+			//位置偏移
+			offset : {
+				left : 0,
+				right : 0,
+				top : 0,
+				bottom : 0
+			},
+			style : null, //样式
+			width:147,  //宽度
+			height:429, //高度
+			position:"rm" //位置
+		}, settings || {});	
+		var winW = $(window).width();
+		var winH = $(window).height();
+		
+		 //根据参数获取位置数值
+		function getPosition($applyTo,position){
+			var _pos = null;
+			switch(position){
+				case "rm" : 
+					$applyTo.data("offset","right");
+					$applyTo.data("offsetPostion",settings.offset.right);
+					_pos = {right:settings.offset.right,top:winH/3.2-$applyTo.innerHeight()/3.2};
+				break;
+				case "lm" :
+					$applyTo.data("offset","left");
+					$applyTo.data("offsetPostion",settings.offset.left);
+					_pos = {left:settings.offset.left,top:winH/3.2-$applyTo.innerHeight()/3.2};
+				break;
+				case "rb" :
+					_pos = {right:settings.offset.right,top:winH - $applyTo.innerHeight()};
+				break;
+				case "lb" :
+					_pos = {left:settings.offset.left,top:winH - $applyTo.innerHeight()};
+				break;
+				case "l" : 
+					_pos = {left:settings.offset.left,top:settings.offset.top};
+				break;
+				case "r" : 
+					_pos = {right:settings.offset.right,top:settings.offset.top};
+				break;				
+				case "t" :
+					$applyTo.data("offset","top");
+					$applyTo.data("offsetPostion",settings.offset.top);					
+					_pos = {left:settings.offset.left,top:settings.offset.top};
+				break;
+				case "b" :
+					$applyTo.data("offset","bottom");
+					$applyTo.data("offsetPostion",settings.offset.bottom);					
+					_pos = {left:settings.offset.left,top:winH - $applyTo.innerHeight()};				
+				break;
+			}
+			return _pos;
+		}
+		//设置容器位置
+		function setPosition($applyTo,position,isUseAnimate){
+			var scrollTop = $(window).scrollTop();
+			var scrollLeft = $(window).scrollLeft();
+			var _pos = getPosition($applyTo,position);
+			_pos.top += scrollTop;
+			isUseAnimate && $applyTo.stop().animate(_pos,settings.delay) || $applyTo.css(_pos);
+		} 
+		return this.each(function(){
+			var $this =  $(this);
+			$this.css("position","absolute");
+			settings.style && $this.css(settings.style);
+			setPosition($this,settings.position);
+			$(this).data("isAllowScroll",true);
+			$(window).scroll(function(){
+				$this.data("isAllowScroll") && setPosition($this,settings.position,true);
+			});
+		})	
+	}else{
+		var speed = arguments.length > 1 && arguments[1] || "fast"; 
+		this.each(function(){		   
+			if(settings == "clearOffset"){
+					var _c = {};
+					if($(this).data("offset")){
+						 _c[$(this).data("offset")] = 0; 
+						 $(this).data("isAllowScroll",false);
+						 $(this).stop().animate(_c,speed);
+					}
+			}else if(settings == "addOffset"){
+					var _c = {};
+					if($(this).data("offset") && $(this).data("offsetPostion")){
+						 _c[$(this).data("offset")] = $(this).data("offsetPostion"); 
+						 $(this).stop().animate(_c,speed);
+						 $(this).data("isAllowScroll",true);
+					}
+									   
+			}else if(settings == "setScrollDisable"){
+				$(this).data("isAllowScroll",false);
+			}else if(settings == "setScrollUsable"){
+				$(this).data("isAllowScroll",true);	
+			}
+		})
+	}
+}
+</script>
+<script type="text/javascript">
+$(function(){
+	$(".customer").float({
+		delay : 500,//延迟
+		position:"rm" //位置
+	});
+});
+</script>
+</head>
+<body>
+<!--右侧浮动层-->
+<div class="customer">
+	<ul>
+		<li><a href="#">您遇到什么问题？</a></li>
+		<li><a href="#">企业内训需求</a></li>
+		<li><a href="#">企业员工培训</a></li>
+		<li><a href="#">专业岗位证书</a></li>
+	</ul>
+	<h2><a href="#"><img src="images/edu-ico13.png"> 企业内训定制</a></h2>
+	<div class="lineWrap">
+		<div class="line">
+			<i></i>
+			<h3>在线客服</h3>
+			<input type="button" value="马上咨询" />
+		</div>
+	</div>
+	<h4><a href="#"><img src="images/webchat.png"></a></h4>
+	<p>智联教育服务号</p>
+</div>
+<!--header-->
+<div class="headerWrap">
+	<div class="header w990 cleafix">
+		<!--logo-->
+		<div class="logo fl"><a href="#"><img src="images/logo.png"></a></div>
+		<!--search-->
+		<div class="hea-r fr">
+			<div class="search">
+				<div class="nav_bbs" id="nav">
+					<p class="set">课程</p>
+					<ul class="new">
+						<li>课程1</li>
+						<li>课程2</li>
+						<li>课程3</li>
+					</ul>
+				</div>
+				<input onClick="test1()"  onblur="test2()" type="text" id="test" class="search_text" value="雅思刷分季" />
+				<input type="button" value=" " class="search_sub" />
+			</div>
+			<i><em>课程咨询热线：</em><b>400-115-6660</b></i>
+		</div>
+	</div>
+</div>
+<!--nav-->
+<div class="navWrap">
+	<div class="nav w990 cleafix">
+		<!--左侧导航-->
+		<div id="nav-left" class="nav-left fl">
+			<h2>全部课程<i></i></h2>
+		</div>
+		<ol id="navol">
+			<li>
+				<h3>云课堂</h3>
+				<p class="cleafix">
+					<a href="#">心想事呈职业化</a>
+					<a href="#">销售宝</a>
+					<a href="#" style="margin-right: 0;">经理荟</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">人力资源</a>
+					<a href="#">IT+互联网</a>
+					<a href="#" style="margin-right: 0;">管理技能</a>
+				</p>
+			</li>
+			<li>
+				<h3>HRTP</h3>
+				<p class="cleafix">
+					<a href="#">绩效薪酬管理师</a>
+					<a href="#" style="margin-right: 0;">企业内训经理</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">人才测评师</a>
+					<a href="#">人力资源经理</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">劳动争议预防调解师</a>
+				</p>
+			</li>
+			<li>
+				<h3>智选课堂</h3>
+				<p class="cleafix">
+					<a href="#">卓越管理</a>
+					<a href="#" style="margin-right: 0;">心想事呈职业化</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">精品课程</a>
+					<a href="#">人力资源</a>
+				</p>
+			</li>
+    
+			<li style="border: none;">
+				<h3>内训精品课</h3>
+				<p class="cleafix">
+					<a href="#">团队效能</a>
+					<a href="#">心想事呈职业化</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">人力资源</a>
+				</p>
+			</li>
+		</ol>
+		<ul>
+			<li><a href="#" class="cur">首页<i></i></a></li>
+			<li><a href="#">云课堂<i></i></a></li>
+			<li><a href="#">HRTP<i></i></a></li>
+			<li><a href="#">智选课堂<i></i></a></li>
+			<li><a href="#">企业内训<i></i></a></li>
+			<li><a href="#">智汇导师<i></i></a></li>
+			<li><a href="#">关于我们<i></i></a></li>
+		</ul>
+	</div>
+</div>
+<!--banner-->
+<div id="slideBox" class="banner">
+	<div class="hd">
+		<ul>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<div class="bd">
+		<ul>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+		</ul>
+	</div>
+	<script type="text/javascript">
+	jQuery(".banner").slide({mainCell:".bd ul",autoPlay:true,trigger:"click"});
+	</script>
+</div>
+<!--页面主体部分-->
+<div class="contentWrap">
+	<!--内训专题-->
+	<div class="conten">
+		<div class="conten-title">
+			<h2>内心专题</h2>
+		</div>
+		<div class="conten-bom">
+			<ul class="cleafix">
+				<li>
+					<div class="cb-Img"><a href="#"><img src="images/en-img1.jpg"></a></div>
+					<div class="layer"><p>人力资源管理</p><h3>通用管理</h3><h4>模块一：领导魅力</h4><h4>模块二：管理艺术</h4><a href="#">了解更多></a></div>
+				</li>
+				<li>
+					<div class="cb-Img"><a href="#"><img src="images/en-img2.jpg"></a></div>
+					<div class="layer"><p>人力资源管理</p><h3>通用管理</h3><h4>模块一：领导魅力</h4><h4>模块二：管理艺术</h4><a href="#">了解更多></a></div>
+				</li>
+				<li style="margin-right: 0;float: right;">
+					<div class="cb-Img"><a href="#"><img src="images/en-img3.jpg"></a></div>
+					<div class="layer"><p>人力资源管理</p><h3>通用管理</h3><h4>模块一：领导魅力</h4><h4>模块二：管理艺术</h4><a href="#">了解更多></a></div>
+				</li>
+				<li>
+					<div class="cb-Img"><a href="#"><img src="images/en-img4.jpg"></a></div>
+					<div class="layer"><p>人力资源管理</p><h3>通用管理</h3><h4>模块一：领导魅力</h4><h4>模块二：管理艺术</h4><a href="#">了解更多></a></div>
+				</li>
+				<li>
+					<div class="cb-Img"><a href="#"><img src="images/en-img5.jpg"></a></div>
+					<div class="layer"><p>人力资源管理</p><h3>通用管理</h3><h4>模块一：领导魅力</h4><h4>模块二：管理艺术</h4><a href="#">了解更多></a></div>
+				</li>
+				<li style="margin-right: 0;float: right;">
+					<div class="cb-Img"><a href="#"><img src="images/en-img6.jpg"></a></div>
+					<div class="layer"><p>人力资源管理</p><h3>通用管理</h3><h4>模块一：领导魅力</h4><h4>模块二：管理艺术</h4><a href="#">了解更多></a></div>
+				</li>
+			</ul>
+			<script type="text/javascript">
+				$(".conten-bom ul li").hover(function(){
+					//鼠标滑上去
+					$(this).find(".layer").animate({"bottom":"0px"},300);
+//					$(this).find("p").hide();
+					
+			
+				},function(){
+					//鼠标移开之后
+					$(this).find(".layer").animate({"bottom":"-182px"},300);
+//					$(this).find("p").fadeIn(1000);
+				});
+			</script>
+			<!--心想事成-->
+			<div class="horse cleafix">
+				<div class="horse-l fl">
+					<span>精品课</span>
+				</div>
+				<div class="horse-r fl">
+					<ol class="cleafix">
+						<li>
+							<img src="images/en-img8.jpg">
+							<p>心想事呈系列</p>
+							<a href="#">查看更多></a>
+						</li>
+						<li>
+							<img src="images/en-img9.jpg">
+							<p>团队效能系列</p>
+							<a href="#">查看更多></a>
+						</li>
+						<li>
+							<img src="images/en-img10.jpg">
+							<p>人力资源系列</p>
+							<a href="#">查看更多></a>
+						</li>
+					</ol>
+				</div>
+			</div>
+			<!--“诊断式“企业内训-->
+			<div class="diagn cleafix">
+				<div class="diagn-l fl">
+					<img src="images/en-img11.jpg">
+					<h2>“诊断式“企业内训</h2>
+					<p>我们客服传统企业内训”团队需求把握不准“、”课程设计精准度不高“等诸多弊病，创新研发出”测评+培训“一体化的全新产品——企业”诊断式培训“，精确把脉团队问题、针对性匹配课程和讲师，从根本上提升团队的核心能力。</p>
+					<a href="#">查看更多></a>
+				</div>
+				<div class="diagn-r fl"><span>“诊断式”<br />企业内训</span></div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--企业内训的优势-->
+<div class="advanWrap">
+	<div class="advan">
+		<div class="advan-title"><h2>企业内训的优势</h2></div>
+		<ul class="cleafix">
+			<li>
+				<img src="images/en-ico1.png">
+				<h2>针对性强</h2>
+				<p>通过课前调研，让讲师获得最符合企业特征的信息和关键问题点，设计出符合企业实际情况的课程内容和授课形式，从而提升现场培训的效果。</p>
+			</li>
+			<li>
+				<img src="images/en-ico2.png">
+				<h2>受众面准</h2>
+				<p>既可对企业全体员工进行统一培训，又可针对不同部门、不同层级的员工量身定制培训课程，精准定位培训效果。</p>
+			</li>
+			<li>
+				<img src="images/en-ico3.png">
+				<h2>互动性好</h2>
+				<p>把专家请到企业去授课，学员可以与授课老师面对面沟通交流、现场答疑解惑，具有很强的互动性。</p>
+			</li>
+			<li>
+				<img src="images/en-ico4.png">
+				<h2>性价比高</h2>
+				<p>除个别课程外，内训的受训人数比较灵活，对于人数较多的企业具有成本上的优势。</p>
+			</li>
+			<li style="margin-right: 0;float: right;">
+				<img src="images/en-ico5.png">
+				<h2>“外脑”优势</h2>
+				<p>企业的业务和管理千头万绪，内部具备精通业务的专业人才，但并非所有培训主题的内部师资都具备；此外，“当局者迷、旁观者清”的现状也使得“外脑”可以与“内脑”结合，共同帮助企业成长和进步。</p>
+			</li>
+		</ul>
+	</div>
+</div>
+<!--企业内训实施流程-->
+<div class="enterWrap">
+	<div class="enter">
+		<div class="enter-title"><h2>企业内训实施流程</h2></div>
+		<div class="enter-tab">
+			<div class="hd">
+				<ul>
+					<li class="enhd1"><em>1</em><span>培训需求调研</span></li>
+					<li class="enhd2"><em>2</em><span>培训需求调研</span></li>
+					<li class="enhd3"><em>3</em><span>培训需求调研</span></li>
+					<li class="enhd4"><em>4</em><span>培训需求调研</span></li>
+					<li class="enhd5"><em>5</em><span>培训需求调研</span></li>
+					<li class="enhd6"><em>6</em><span>培训需求调研</span></li>
+				</ul>
+			</div>
+			<div class="bd">
+				<ul>
+					<i></i>
+					<li>
+						<em>（1）企业背景及存在问题 </em>
+						<em>（2）培训的目的与预期效果</em>
+						<em>（3）学员基本情况</em>
+					</li>
+				</ul>
+				<ul>
+					<i class="icon1"></i>
+					<li>
+						<em>（1）企业背景及存在问题 </em>
+						<em>（2）培训的目的与预期效果</em>
+						<em>（3）学员基本情况</em>
+					</li>
+				</ul>
+				<ul>
+					<i class="icon2"></i>
+					<li>
+						<em>（1）企业背景及存在问题 </em>
+						<em>（2）培训的目的与预期效果</em>
+						<em>（3）学员基本情况</em>
+					</li>
+				</ul>
+				<ul>
+					<i class="icon3"></i>
+					<li>
+						<em>（1）企业背景及存在问题 </em>
+						<em>（2）培训的目的与预期效果</em>
+						<em>（3）学员基本情况</em>
+					</li>
+				</ul>
+				<ul>
+					<i class="icon4"></i>
+					<li>
+						<em>（1）企业背景及存在问题 </em>
+						<em>（2）培训的目的与预期效果</em>
+						<em>（3）学员基本情况</em>
+					</li>
+				</ul>
+				<ul>
+					<i class="icon5"></i>
+					<li>
+						<em>（1）企业背景及存在问题 </em>
+						<em>（2）培训的目的与预期效果</em>
+						<em>（3）学员基本情况</em>
+					</li>
+				</ul>
+			</div>
+			<script type="text/javascript">jQuery(".enter-tab").slide();</script>
+		</div>
+		
+	</div>
+</div>
+<!--服务客户-->
+<div class="serverWrap">
+	<div class="server w990">
+		<div class="server-title"><h2>服务客户</h2></div>
+		<p>我们已经为888个企业，提供了人力资源，管理技能，职业素养等相关技能培训，他们分布在金融，地产，汽车等行业。</p>
+		<div class="server-bom"><img src="images/en-img13.png"></div>
+	</div>
+</div>
+<!--尾部-->
+<div class="tailWrap">
+	<div class="tail cleafix">
+		<img src="images/webchat.png">
+		<p>扫二维码，关注并回复<em>“内训需求”</em>，填写<em>“企业内训需求表”</em>进行报名</p>
+	</div>
+</div>
+<!--footer-->
+<div class="footWrap">
+	<p>
+		<a href="#">智联介绍</a><span>|</span>
+		<a href="#">网站地图</a><span>|</span>
+		<a href="#">加入智联</a><span>|</span>
+		<a href="#">法律声明</a><span>|</span>
+		<a href="#">保密承诺</a><span>|</span>
+		<a href="#">联系方式</a><span>|</span>
+		<a href="#">常见问题</a><span>|</span>
+		<a href="#">Investor Relations</a>
+		您对 Zhaopin.com 有任何建议或意见请
+		<a herf="#">联系我们</a>
+	</p>
+	<p>未经zhaopin.com 同意，不得转载本网站之所有招聘信息及作品 智联招聘网版权所有© 1997-2015</p>
+	<p>京ICP备12025925号 电信业务审批[2001]字第233号函 京公网安备110105000322 .</p>
+</div>
+</body>
+</html>

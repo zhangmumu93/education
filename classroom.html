@@ -1,0 +1,621 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>智联教育（智选课堂）</title>
+<link rel="stylesheet" href="css/default.css" />
+<link rel="stylesheet" href="css/index.css" />
+<script type="text/javascript" src="js/jquery.js" ></script>
+<script type="text/javascript" src="js/index.js" ></script>
+<script type="text/javascript" src="js/jquery.superslide.2.1.1.js" ></script>
+<script type="text/javascript">
+jQuery.fn.float= function(settings){
+	if(typeof settings == "object"){
+		settings = jQuery.extend({
+			//延迟
+			delay : 1000,
+			//位置偏移
+			offset : {
+				left : 0,
+				right : 0,
+				top : 0,
+				bottom : 0
+			},
+			style : null, //样式
+			width:147,  //宽度
+			height:429, //高度
+			position:"rm" //位置
+		}, settings || {});	
+		var winW = $(window).width();
+		var winH = $(window).height();
+		
+		 //根据参数获取位置数值
+		function getPosition($applyTo,position){
+			var _pos = null;
+			switch(position){
+				case "rm" : 
+					$applyTo.data("offset","right");
+					$applyTo.data("offsetPostion",settings.offset.right);
+					_pos = {right:settings.offset.right,top:winH/3.2-$applyTo.innerHeight()/3.2};
+				break;
+				case "lm" :
+					$applyTo.data("offset","left");
+					$applyTo.data("offsetPostion",settings.offset.left);
+					_pos = {left:settings.offset.left,top:winH/3.2-$applyTo.innerHeight()/3.2};
+				break;
+				case "rb" :
+					_pos = {right:settings.offset.right,top:winH - $applyTo.innerHeight()};
+				break;
+				case "lb" :
+					_pos = {left:settings.offset.left,top:winH - $applyTo.innerHeight()};
+				break;
+				case "l" : 
+					_pos = {left:settings.offset.left,top:settings.offset.top};
+				break;
+				case "r" : 
+					_pos = {right:settings.offset.right,top:settings.offset.top};
+				break;				
+				case "t" :
+					$applyTo.data("offset","top");
+					$applyTo.data("offsetPostion",settings.offset.top);					
+					_pos = {left:settings.offset.left,top:settings.offset.top};
+				break;
+				case "b" :
+					$applyTo.data("offset","bottom");
+					$applyTo.data("offsetPostion",settings.offset.bottom);					
+					_pos = {left:settings.offset.left,top:winH - $applyTo.innerHeight()};				
+				break;
+			}
+			return _pos;
+		}
+		//设置容器位置
+		function setPosition($applyTo,position,isUseAnimate){
+			var scrollTop = $(window).scrollTop();
+			var scrollLeft = $(window).scrollLeft();
+			var _pos = getPosition($applyTo,position);
+			_pos.top += scrollTop;
+			isUseAnimate && $applyTo.stop().animate(_pos,settings.delay) || $applyTo.css(_pos);
+		} 
+		return this.each(function(){
+			var $this =  $(this);
+			$this.css("position","absolute");
+			settings.style && $this.css(settings.style);
+			setPosition($this,settings.position);
+			$(this).data("isAllowScroll",true);
+			$(window).scroll(function(){
+				$this.data("isAllowScroll") && setPosition($this,settings.position,true);
+			});
+		})	
+	}else{
+		var speed = arguments.length > 1 && arguments[1] || "fast"; 
+		this.each(function(){		   
+			if(settings == "clearOffset"){
+					var _c = {};
+					if($(this).data("offset")){
+						 _c[$(this).data("offset")] = 0; 
+						 $(this).data("isAllowScroll",false);
+						 $(this).stop().animate(_c,speed);
+					}
+			}else if(settings == "addOffset"){
+					var _c = {};
+					if($(this).data("offset") && $(this).data("offsetPostion")){
+						 _c[$(this).data("offset")] = $(this).data("offsetPostion"); 
+						 $(this).stop().animate(_c,speed);
+						 $(this).data("isAllowScroll",true);
+					}
+									   
+			}else if(settings == "setScrollDisable"){
+				$(this).data("isAllowScroll",false);
+			}else if(settings == "setScrollUsable"){
+				$(this).data("isAllowScroll",true);	
+			}
+		})
+	}
+}
+</script>
+<script type="text/javascript">
+$(function(){
+	$(".customer").float({
+		delay : 500,//延迟
+		position:"rm" //位置
+	});
+});
+</script>
+</head>
+<body>
+<!--右侧浮动层-->
+<div class="customer">
+	<ul>
+		<li><a href="#">您遇到什么问题？</a></li>
+		<li><a href="#">企业内训需求</a></li>
+		<li><a href="#">企业员工培训</a></li>
+		<li><a href="#">专业岗位证书</a></li>
+	</ul>
+	<h2><a href="#"><img src="images/edu-ico13.png"> 企业内训定制</a></h2>
+	<div class="lineWrap">
+		<div class="line">
+			<i></i>
+			<h3>在线客服</h3>
+			<input type="button" value="马上咨询" />
+		</div>
+	</div>
+	<h4><a href="#"><img src="images/webchat.png"></a></h4>
+	<p>智联教育服务号</p>
+</div>
+<!--header-->
+<div class="headerWrap">
+	<div class="header w990 cleafix">
+		<!--logo-->
+		<div class="logo fl"><a href="#"><img src="images/logo.png"></a></div>
+		<!--search-->
+		<div class="hea-r fr">
+			<div class="search">
+				<div class="nav_bbs" id="nav">
+					<p class="set">课程</p>
+					<ul class="new">
+						<li>课程1</li>
+						<li>课程2</li>
+						<li>课程3</li>
+					</ul>
+				</div>
+				<input onClick="test1()"  onblur="test2()" type="text" id="test" class="search_text" value="雅思刷分季" />
+				<input type="button" value=" " class="search_sub" />
+			</div>
+			<i><em>课程咨询热线：</em><b>400-115-6660</b></i>
+		</div>
+	</div>
+</div>
+<!--nav-->
+<div class="navWrap">
+	<div class="nav w990 cleafix">
+		<!--左侧导航-->
+		<div id="nav-left" class="nav-left fl">
+			<h2>全部课程<i></i></h2>
+		</div>
+		<ol id="navol">
+			<li>
+				<h3>云课堂</h3>
+				<p class="cleafix">
+					<a href="#">心想事呈职业化</a>
+					<a href="#">销售宝</a>
+					<a href="#" style="margin-right: 0;">经理荟</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">人力资源</a>
+					<a href="#">IT+互联网</a>
+					<a href="#" style="margin-right: 0;">管理技能</a>
+				</p>
+			</li>
+			<li>
+				<h3>HRTP</h3>
+				<p class="cleafix">
+					<a href="#">绩效薪酬管理师</a>
+					<a href="#" style="margin-right: 0;">企业内训经理</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">人才测评师</a>
+					<a href="#">人力资源经理</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">劳动争议预防调解师</a>
+				</p>
+			</li>
+			<li>
+				<h3>智选课堂</h3>
+				<p class="cleafix">
+					<a href="#">卓越管理</a>
+					<a href="#" style="margin-right: 0;">心想事呈职业化</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">精品课程</a>
+					<a href="#">人力资源</a>
+				</p>
+			</li>
+    
+			<li style="border: none;">
+				<h3>内训精品课</h3>
+				<p class="cleafix">
+					<a href="#">团队效能</a>
+					<a href="#">心想事呈职业化</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">人力资源</a>
+				</p>
+			</li>
+		</ol>
+		<ul>
+			<li><a href="#" class="cur">首页<i></i></a></li>
+			<li><a href="#">云课堂<i></i></a></li>
+			<li><a href="#">HRTP<i></i></a></li>
+			<li><a href="#">智选课堂<i></i></a></li>
+			<li><a href="#">企业内训<i></i></a></li>
+			<li><a href="#">智汇导师<i></i></a></li>
+			<li><a href="#">关于我们<i></i></a></li>
+		</ul>
+	</div>
+</div>
+<!--banner-->
+<div id="slideBox" class="banner">
+	<div class="hd">
+		<ul>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<div class="bd">
+		<ul>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+		</ul>
+	</div>
+	<script type="text/javascript">
+	jQuery(".banner").slide({mainCell:".bd ul",autoPlay:true,trigger:"click"});
+	</script>
+</div>
+<!--页面主体部分-->
+<div class="c_mainWrap">
+	<!--智选课堂是什么？-->
+	<div class="c_class w990">
+		<h2>智选课堂是什么？</h2>
+		<div class="c_class_con cleafix">
+			<div class="c_class_fl fl">
+				<div class="img"><img src="images/c_ico1.png"/></div>
+				<p>面对越发丰富的培训课程产品，企业的选择却更加困难：内训价格昂贵，公开课培训质量良莠不齐。针对这些状况，智联教育在广泛市场调研的基础上，推出了解决企业普遍性问题的年度公开课 —— 智选课堂！企业可根据自身的培训需求，灵活地选择课程主题和时间参加学习。</p>
+			</div>
+			<div class="c_class_fr fr">
+				<div class="c_tit cleafix"><img src="images/c_ico2.png" />智选追踪</div>
+				<ul>
+					<li><a href="#"><i></i>杭州“智选课堂”携手“心想事呈”，新老…</a></li>
+					<li><a href="#"><i></i>天津、沈阳、哈尔滨：2016“智选课堂”</a></li>
+					<li><a href="#"><i></i>2015年第12期《问题分析与解决》圆满落幕。</a></li>
+					<li><a href="#"><i></i>卓越管理篇之《职场思考力》全面升级！</a></li>
+					<li><a href="#"><i></i>成都精品小班：《企业管理与风险防范》精…</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<!--选择智选课堂的三大理由-->
+	<div class="c_reason">
+		<div class="c_rea w990">
+			<h2>选择智选课堂的三大理由</h2>
+			<div class="c_rea_ul">
+				<ul class="cleafix">
+					<li>
+						<div class="img"><img src="images/c_ico4.png"/></div>
+						<p>不炒作、不骗人，我们不让您为“中国首家”“亚洲第一”等等虚假光环买单。</p>
+					</li>
+					<li>
+						<div class="img"><img src="images/c_ico5.png"/></div>
+						<p>我们只做实战型课程，与您一同见证改变和成长。不打“鸡血”、不卖“鸡汤”。</p>
+					</li>
+					<li>
+						<div class="img"><img src="images/c_ico6.png"/></div>
+						<p>员工人数少，培训预算低，内训请不起。我们用灵活的自选模式解决多元的培训问题。</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<!--智选课堂的模块-->
+	<div class="c_class c_class1 w990">
+		<h2>智选课堂的模块</h2>
+		<div class="c_model">
+			<p class="c_mfl">公开课大班针对企业中各个层级员工提升职业技能、提高职业素养的普遍需求，对症开班，课程领域广泛，客户可根据培训需求自由选择 </p>
+			<h3 class="c_mmll">公开课大班</h3>
+			<h3 class="c_mmlr">精品小班</h3>
+			<p class="c_mfr">精品小班是针对企业中层管理者、团队负责人、人力资源经理及培训经理的集中特训，课时2天，招生规模在60人左右，小班特训方便学员展开研讨，更能保障课堂互动。</p>
+		</div>
+	</div>
+	
+	<!--智选课堂的课程-->
+	<div class="c_classis">
+		<div class="c_cla_tit w990">
+			<h2>智选课堂的课程</h2>
+			<div class="c_cla_con">
+				<div class="c_tab">
+					<div id="c_tab">                              
+						<ul class="c_tab_menu cleafix">
+					    	<li class="selected" style="margin-left: 40px;">成都<i class="ico"></i></li>
+					        <li>杭州<i class="ico"></i></li>
+					        <li>郑州<i class="ico"></i></li>
+					        <li>济南<i class="ico"></i></li>
+					        <li>沈阳<i class="ico"></i></li>
+					        <li>哈尔滨<i class="ico"></i></li>
+					        <li>青岛<i class="ico"></i></li>
+					    </ul>
+					    <div class="c_tab_box">
+					    	<div>
+					    		<table cellpadding="0" cellspacing="0" >
+					    			<tr><th>课程类别</th><th>课程主题</th><th>课时</th><th>学员对象</th><th style="border-right: 0;">开课时间</th></tr>
+					    			<tr class="daban"><td colspan='5'>公开课大班</td></tr>
+					    			<tr><td class="td1" rowspan="3">卓越管理</td><td class="td2">《管理授权与激励》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《卓越执行力》</td><td>1天</td><td>中高层管理者、团队负责人、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《职场思考力》</td><td>1天</td><td>中基层管理者、人力资源管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td1" rowspan="3">人力资源</td><td class="td2">《80/90后员工管理》</td><td>1天</td><td>人力资源总监/经理、相关管理者</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《薪酬体系与薪酬设计》</td><td>1天</td><td>人力资源经理/主管、招聘经理/主管/专员</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《识人用人与性格分析》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td1" rowspan="7">心想事呈<br/>职业素养</td><td class="td2">《压力与情绪管理》</td><td>1天</td><td>中基层管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《时间管理》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《商务礼仪》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《管理者角色认知》</td><td>1天</td><td>中层管理者、新人经理人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《有效沟通技巧》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《问题分析与解决》</td><td>1天</td><td>中层管理者、新人经理人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《目标管理》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr class="daban"><td colspan='5'>精品小班（60人）</td></tr>
+					    			<tr><td class="td1" rowspan="2">精品课程</td><td class="td2">《高效能团队建设与管理》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《培训体系建立与管理》</td><td>1天</td><td>人力资源经理、培训经理</td><td>5月5日</td></tr>
+					    		</table>
+					    		<p>注：企业公开课为每课每人1人次消费，精品小班为每课每人3人次消费。<br />课程联系电话：<span>88888888888</span></p>
+					    	</div>
+					        <div class="hide">
+					        	<table cellpadding="0" cellspacing="0" >
+					    			<tr><th>课程类别2</th><th>课程主题</th><th>课时</th><th>学员对象</th><th style="border-right: 0;">开课时间</th></tr>
+					    			<tr class="daban"><td colspan='5'>公开课大班</td></tr>
+					    			<tr><td class="td1" rowspan="3">卓越管理</td><td class="td2">《管理授权与激励》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《卓越执行力》</td><td>1天</td><td>中高层管理者、团队负责人、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《职场思考力》</td><td>1天</td><td>中基层管理者、人力资源管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td1" rowspan="3">人力资源</td><td class="td2">《80/90后员工管理》</td><td>1天</td><td>人力资源总监/经理、相关管理者</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《薪酬体系与薪酬设计》</td><td>1天</td><td>人力资源经理/主管、招聘经理/主管/专员</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《识人用人与性格分析》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td1" rowspan="7">心想事呈<br/>职业素养</td><td class="td2">《压力与情绪管理》</td><td>1天</td><td>中基层管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《时间管理》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《商务礼仪》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《管理者角色认知》</td><td>1天</td><td>中层管理者、新人经理人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《有效沟通技巧》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《问题分析与解决》</td><td>1天</td><td>中层管理者、新人经理人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《目标管理》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr class="daban"><td colspan='5'>精品小班（60人）</td></tr>
+					    			<tr><td class="td1" rowspan="2">精品课程</td><td class="td2">《高效能团队建设与管理》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《培训体系建立与管理》</td><td>1天</td><td>人力资源经理、培训经理</td><td>5月5日</td></tr>
+					    		</table>
+					    		<p>注：企业公开课为每课每人1人次消费，精品小班为每课每人3人次消费。<br />课程联系电话：<span>88888888888</span></p>
+					        </div>
+					        <div class="hide">
+					        	<table cellpadding="0" cellspacing="0" >
+					    			<tr><th>课程类别3</th><th>课程主题</th><th>课时</th><th>学员对象</th><th style="border-right: 0;">开课时间</th></tr>
+					    			<tr class="daban"><td colspan='5'>公开课大班</td></tr>
+					    			<tr><td class="td1" rowspan="3">卓越管理</td><td class="td2">《管理授权与激励》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《卓越执行力》</td><td>1天</td><td>中高层管理者、团队负责人、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《职场思考力》</td><td>1天</td><td>中基层管理者、人力资源管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td1" rowspan="3">人力资源</td><td class="td2">《80/90后员工管理》</td><td>1天</td><td>人力资源总监/经理、相关管理者</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《薪酬体系与薪酬设计》</td><td>1天</td><td>人力资源经理/主管、招聘经理/主管/专员</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《识人用人与性格分析》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td1" rowspan="7">心想事呈<br/>职业素养</td><td class="td2">《压力与情绪管理》</td><td>1天</td><td>中基层管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《时间管理》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《商务礼仪》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《管理者角色认知》</td><td>1天</td><td>中层管理者、新人经理人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《有效沟通技巧》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《问题分析与解决》</td><td>1天</td><td>中层管理者、新人经理人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《目标管理》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr class="daban"><td colspan='5'>精品小班（60人）</td></tr>
+					    			<tr><td class="td1" rowspan="2">精品课程</td><td class="td2">《高效能团队建设与管理》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《培训体系建立与管理》</td><td>1天</td><td>人力资源经理、培训经理</td><td>5月5日</td></tr>
+					    		</table>
+					    		<p>注：企业公开课为每课每人1人次消费，精品小班为每课每人3人次消费。<br />课程联系电话：<span>88888888888</span></p>
+					        </div>
+					        <div class="hide">
+					        	<table cellpadding="0" cellspacing="0" >
+					    			<tr><th>课程类别4</th><th>课程主题</th><th>课时</th><th>学员对象</th><th style="border-right: 0;">开课时间</th></tr>
+					    			<tr class="daban"><td colspan='5'>公开课大班</td></tr>
+					    			<tr><td class="td1" rowspan="3">卓越管理</td><td class="td2">《管理授权与激励》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《卓越执行力》</td><td>1天</td><td>中高层管理者、团队负责人、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《职场思考力》</td><td>1天</td><td>中基层管理者、人力资源管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td1" rowspan="3">人力资源</td><td class="td2">《80/90后员工管理》</td><td>1天</td><td>人力资源总监/经理、相关管理者</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《薪酬体系与薪酬设计》</td><td>1天</td><td>人力资源经理/主管、招聘经理/主管/专员</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《识人用人与性格分析》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td1" rowspan="7">心想事呈<br/>职业素养</td><td class="td2">《压力与情绪管理》</td><td>1天</td><td>中基层管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《时间管理》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《商务礼仪》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《管理者角色认知》</td><td>1天</td><td>中层管理者、新人经理人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《有效沟通技巧》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《问题分析与解决》</td><td>1天</td><td>中层管理者、新人经理人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《目标管理》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr class="daban"><td colspan='5'>精品小班（60人）</td></tr>
+					    			<tr><td class="td1" rowspan="2">精品课程</td><td class="td2">《高效能团队建设与管理》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《培训体系建立与管理》</td><td>1天</td><td>人力资源经理、培训经理</td><td>5月5日</td></tr>
+					    		</table>
+					    		<p>注：企业公开课为每课每人1人次消费，精品小班为每课每人3人次消费。<br />课程联系电话：<span>88888888888</span></p>
+					        </div>
+					        <div class="hide">
+					        	<table cellpadding="0" cellspacing="0" >
+					    			<tr><th>课程类别5</th><th>课程主题</th><th>课时</th><th>学员对象</th><th style="border-right: 0;">开课时间</th></tr>
+					    			<tr class="daban"><td colspan='5'>公开课大班</td></tr>
+					    			<tr><td class="td1" rowspan="3">卓越管理</td><td class="td2">《管理授权与激励》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《卓越执行力》</td><td>1天</td><td>中高层管理者、团队负责人、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《职场思考力》</td><td>1天</td><td>中基层管理者、人力资源管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td1" rowspan="3">人力资源</td><td class="td2">《80/90后员工管理》</td><td>1天</td><td>人力资源总监/经理、相关管理者</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《薪酬体系与薪酬设计》</td><td>1天</td><td>人力资源经理/主管、招聘经理/主管/专员</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《识人用人与性格分析》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td1" rowspan="7">心想事呈<br/>职业素养</td><td class="td2">《压力与情绪管理》</td><td>1天</td><td>中基层管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《时间管理》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《商务礼仪》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《管理者角色认知》</td><td>1天</td><td>中层管理者、新人经理人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《有效沟通技巧》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《问题分析与解决》</td><td>1天</td><td>中层管理者、新人经理人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《目标管理》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr class="daban"><td colspan='5'>精品小班（60人）</td></tr>
+					    			<tr><td class="td1" rowspan="2">精品课程</td><td class="td2">《高效能团队建设与管理》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《培训体系建立与管理》</td><td>1天</td><td>人力资源经理、培训经理</td><td>5月5日</td></tr>
+					    		</table>
+					    		<p>注：企业公开课为每课每人1人次消费，精品小班为每课每人3人次消费。<br />课程联系电话：<span>88888888888</span></p>
+					        </div>
+					        <div class="hide">
+					        	<table cellpadding="0" cellspacing="0" >
+					    			<tr><th>课程类别6</th><th>课程主题</th><th>课时</th><th>学员对象</th><th style="border-right: 0;">开课时间</th></tr>
+					    			<tr class="daban"><td colspan='5'>公开课大班</td></tr>
+					    			<tr><td class="td1" rowspan="3">卓越管理</td><td class="td2">《管理授权与激励》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《卓越执行力》</td><td>1天</td><td>中高层管理者、团队负责人、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《职场思考力》</td><td>1天</td><td>中基层管理者、人力资源管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td1" rowspan="3">人力资源</td><td class="td2">《80/90后员工管理》</td><td>1天</td><td>人力资源总监/经理、相关管理者</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《薪酬体系与薪酬设计》</td><td>1天</td><td>人力资源经理/主管、招聘经理/主管/专员</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《识人用人与性格分析》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td1" rowspan="7">心想事呈<br/>职业素养</td><td class="td2">《压力与情绪管理》</td><td>1天</td><td>中基层管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《时间管理》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《商务礼仪》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《管理者角色认知》</td><td>1天</td><td>中层管理者、新人经理人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《有效沟通技巧》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《问题分析与解决》</td><td>1天</td><td>中层管理者、新人经理人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《目标管理》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr class="daban"><td colspan='5'>精品小班（60人）</td></tr>
+					    			<tr><td class="td1" rowspan="2">精品课程</td><td class="td2">《高效能团队建设与管理》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《培训体系建立与管理》</td><td>1天</td><td>人力资源经理、培训经理</td><td>5月5日</td></tr>
+					    		</table>
+					    		<p>注：企业公开课为每课每人1人次消费，精品小班为每课每人3人次消费。<br />课程联系电话：<span>88888888888</span></p>
+					        </div>
+					        <div class="hide">
+					        	<table cellpadding="0" cellspacing="0" >
+					    			<tr><th>课程类别7</th><th>课程主题</th><th>课时</th><th>学员对象</th><th style="border-right: 0;">开课时间</th></tr>
+					    			<tr class="daban"><td colspan='5'>公开课大班</td></tr>
+					    			<tr><td class="td1" rowspan="3">卓越管理</td><td class="td2">《管理授权与激励》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《卓越执行力》</td><td>1天</td><td>中高层管理者、团队负责人、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《职场思考力》</td><td>1天</td><td>中基层管理者、人力资源管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td1" rowspan="3">人力资源</td><td class="td2">《80/90后员工管理》</td><td>1天</td><td>人力资源总监/经理、相关管理者</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《薪酬体系与薪酬设计》</td><td>1天</td><td>人力资源经理/主管、招聘经理/主管/专员</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《识人用人与性格分析》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td1" rowspan="7">心想事呈<br/>职业素养</td><td class="td2">《压力与情绪管理》</td><td>1天</td><td>中基层管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《时间管理》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《商务礼仪》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《管理者角色认知》</td><td>1天</td><td>中层管理者、新人经理人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《有效沟通技巧》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《问题分析与解决》</td><td>1天</td><td>中层管理者、新人经理人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《目标管理》</td><td>1天</td><td>各层级管理者、核心骨干员工</td><td>5月5日</td></tr>
+					    			<tr class="daban"><td colspan='5'>精品小班（60人）</td></tr>
+					    			<tr><td class="td1" rowspan="2">精品课程</td><td class="td2">《高效能团队建设与管理》</td><td>1天</td><td>中高层管理者、团队负责人</td><td>5月5日</td></tr>
+					    			<tr><td class="td2">《培训体系建立与管理》</td><td>1天</td><td>人力资源经理、培训经理</td><td>5月5日</td></tr>
+					    		</table>
+					    		<p>注：企业公开课为每课每人1人次消费，精品小班为每课每人3人次消费。<br />课程联系电话：<span>88888888888</span></p>
+					        </div>
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!--服务流程-->
+	<div class="c_service w990">
+		<h2>服务流程</h2>
+		<div class="c_flow">
+			<div class="c_fw c_fw1">
+				<h3 class="cleafix"><span>01</span><b>签订合同</b></h3>
+				<p class="p1">致电您所在城的市负责老师（电话见课表下方），沟通培训需求，签订合同。</p>
+			</div>
+			<div class="c_fw c_fw2">
+				<h3 class="cleafix"><span>02</span><b>费用支付</b></h3>
+				<p class="p2">根据合同所示金额及付款账户，支付培训费用。</p>
+			</div>
+			<div class="c_fw c_fw3">
+				<h3 class="cleafix"><span>03</span><b>办理会员</b></h3>
+				<p class="p1">我们将为您建立会员档案，并将会员卡和课表邮寄到您手中。</p>
+			</div>
+			<div class="c_fw c_fw4">
+				<h3 class="cleafix"><span>04</span><b>培训通知</b></h3>
+				<p class="p2">开课前两周，我们将通过短信、邮件、微信群等方式，向您通报上课时间、地点。</p>
+			</div>
+			<div class="c_fw c_fw5">
+				<h3 class="cleafix"><span>05</span><b>刷卡签到</b></h3>
+				<p class="p1">学员按照通知时间准时到达会场，按照工作人员安排，有序签到。</p>
+			</div>
+			<div class="c_fw c_fw6">
+				<h3 class="cleafix"><span>06</span><b>参加培训</b></h3>
+				<p class="p2">学员有序入场，参加培训。同时，我们将为您提供暖心茶点。</p>
+			</div>
+			<div class="c_fw c_fw7">
+				<h3 class="cleafix"><span>07</span><b>意见反馈</b></h3>
+				<p class="p1">学员现场填写课程满意度调查，您的意见能帮助我们作出更好的课程。</p>
+			</div>
+		</div>
+	</div>
+	
+	<!--培训剪影-->
+	<div class="c_silhouette">
+		<div class="c_silh w990">
+			<h2>培训剪影</h2>
+			
+			<div class="c_sil_con">
+				<div class="btnMode" id="slider">  
+					<div class="c_left"></div>
+					<a href="javascript:void(0);" class="prev btn"></a>
+					<div class="scroll">	
+						<ul class="scrollContainer">
+							<li class="panel" id="panel_1">
+								<a href="#" class="inside" target="_blank">
+									<img src="images/c_pic3.jpg" />
+									<span>《卓越管理》成都</span>
+								</a>
+							</li>
+							<li class="panel" id="panel_2">
+								<a href="#" class="inside" target="_blank">
+									<img src="images/c_pic3.jpg" />
+									<span>《卓越管理》成都</span>
+								</a>
+							</li>
+							<li class="panel" id="panel_3">
+								<a href="#" class="inside" target="_blank">
+									<img src="images/c_pic3.jpg" />
+									<span>《卓越管理》成都</span>
+								</a>
+							</li>
+							<li class="panel current" id="panel_4">
+								<a href="#" class="inside" target="_blank">
+									<img src="images/c_pic3.jpg" />
+									<span>《卓越管理》成都</span>
+								</a>
+							</li>
+							<li class="panel" id="panel_5">
+								<a href="#" class="inside" target="_blank">
+									<img src="images/c_pic3.jpg" />
+									<span>《卓越管理》成都</span>
+								</a>
+							</li>
+							<li class="panel" id="panel_6">
+								<a href="#" class="inside" target="_blank">
+									<img src="images/c_pic3.jpg" />
+									<span>《卓越管理》成都</span>
+								</a>
+							</li>
+							<li class="panel" id="panel_7">
+								<a href="#" class="inside" target="_blank">
+									<img src="images/c_pic3.jpg" />
+									<span>《卓越管理》成都</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<a href="javascript:void(0);" class="next btn"></a>  
+					<div class="c_right"></div>  
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--footer-->
+<div class="footWrap">
+	<p>
+		<a href="#">智联介绍</a><span>|</span>
+		<a href="#">网站地图</a><span>|</span>
+		<a href="#">加入智联</a><span>|</span>
+		<a href="#">法律声明</a><span>|</span>
+		<a href="#">保密承诺</a><span>|</span>
+		<a href="#">联系方式</a><span>|</span>
+		<a href="#">常见问题</a><span>|</span>
+		<a href="#">Investor Relations</a>
+		您对 Zhaopin.com 有任何建议或意见请
+		<a herf="#">联系我们</a>
+	</p>
+	<p>未经zhaopin.com 同意，不得转载本网站之所有招聘信息及作品 智联招聘网版权所有© 1997-2015</p>
+	<p>京ICP备12025925号 电信业务审批[2001]字第233号函 京公网安备110105000322 .</p>
+</div>
+<script type="text/javascript" src="js/zzsc.js" ></script>
+</body>
+</html>

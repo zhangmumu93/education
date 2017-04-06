@@ -1,0 +1,774 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>首页</title>
+<link rel="stylesheet" href="css/default.css" />
+<link rel="stylesheet" href="css/index.css" />
+<script type="text/javascript" src="js/jquery.js" ></script>
+<script type="text/javascript" src="js/index.js" ></script>
+<script type="text/javascript" src="js/jquery.superslide.2.1.1.js" ></script>
+<script type="text/javascript">
+jQuery.fn.float= function(settings){
+	if(typeof settings == "object"){
+		settings = jQuery.extend({
+			//延迟
+			delay : 1000,
+			//位置偏移
+			offset : {
+				left : 0,
+				right : 0,
+				top : 0,
+				bottom : 0
+			},
+			style : null, //样式
+			width:147,  //宽度
+			height:429, //高度
+			position:"rm" //位置
+		}, settings || {});	
+		var winW = $(window).width();
+		var winH = $(window).height();
+		
+		 //根据参数获取位置数值
+		function getPosition($applyTo,position){
+			var _pos = null;
+			switch(position){
+				case "rm" : 
+					$applyTo.data("offset","right");
+					$applyTo.data("offsetPostion",settings.offset.right);
+					_pos = {right:settings.offset.right,top:winH/3.2-$applyTo.innerHeight()/3.2};
+				break;
+				case "lm" :
+					$applyTo.data("offset","left");
+					$applyTo.data("offsetPostion",settings.offset.left);
+					_pos = {left:settings.offset.left,top:winH/3.2-$applyTo.innerHeight()/3.2};
+				break;
+				case "rb" :
+					_pos = {right:settings.offset.right,top:winH - $applyTo.innerHeight()};
+				break;
+				case "lb" :
+					_pos = {left:settings.offset.left,top:winH - $applyTo.innerHeight()};
+				break;
+				case "l" : 
+					_pos = {left:settings.offset.left,top:settings.offset.top};
+				break;
+				case "r" : 
+					_pos = {right:settings.offset.right,top:settings.offset.top};
+				break;				
+				case "t" :
+					$applyTo.data("offset","top");
+					$applyTo.data("offsetPostion",settings.offset.top);					
+					_pos = {left:settings.offset.left,top:settings.offset.top};
+				break;
+				case "b" :
+					$applyTo.data("offset","bottom");
+					$applyTo.data("offsetPostion",settings.offset.bottom);					
+					_pos = {left:settings.offset.left,top:winH - $applyTo.innerHeight()};				
+				break;
+			}
+			return _pos;
+		}
+		//设置容器位置
+		function setPosition($applyTo,position,isUseAnimate){
+			var scrollTop = $(window).scrollTop();
+			var scrollLeft = $(window).scrollLeft();
+			var _pos = getPosition($applyTo,position);
+			_pos.top += scrollTop;
+			isUseAnimate && $applyTo.stop().animate(_pos,settings.delay) || $applyTo.css(_pos);
+		} 
+		return this.each(function(){
+			var $this =  $(this);
+			$this.css("position","absolute");
+			settings.style && $this.css(settings.style);
+			setPosition($this,settings.position);
+			$(this).data("isAllowScroll",true);
+			$(window).scroll(function(){
+				$this.data("isAllowScroll") && setPosition($this,settings.position,true);
+			});
+		})	
+	}else{
+		var speed = arguments.length > 1 && arguments[1] || "fast"; 
+		this.each(function(){		   
+			if(settings == "clearOffset"){
+					var _c = {};
+					if($(this).data("offset")){
+						 _c[$(this).data("offset")] = 0; 
+						 $(this).data("isAllowScroll",false);
+						 $(this).stop().animate(_c,speed);
+					}
+			}else if(settings == "addOffset"){
+					var _c = {};
+					if($(this).data("offset") && $(this).data("offsetPostion")){
+						 _c[$(this).data("offset")] = $(this).data("offsetPostion"); 
+						 $(this).stop().animate(_c,speed);
+						 $(this).data("isAllowScroll",true);
+					}
+									   
+			}else if(settings == "setScrollDisable"){
+				$(this).data("isAllowScroll",false);
+			}else if(settings == "setScrollUsable"){
+				$(this).data("isAllowScroll",true);	
+			}
+		})
+	}
+}
+</script>
+<script type="text/javascript">
+$(function(){
+	$(".customer").float({
+		delay : 500,//延迟
+		position:"rm" //位置
+	});
+});
+</script>
+</head>
+<body>
+<!--右侧浮动层-->
+<div class="customer">
+	<ul>
+		<li><a href="#">您遇到什么问题？</a></li>
+		<li><a href="#">企业内训需求</a></li>
+		<li><a href="#">企业员工培训</a></li>
+		<li><a href="#">专业岗位证书</a></li>
+	</ul>
+	<h2><a href="#"><img src="images/edu-ico13.png"> 企业内训定制</a></h2>
+	<div class="lineWrap">
+		<div class="line">
+			<i></i>
+			<h3>在线客服</h3>
+			<input type="button" value="马上咨询" />
+		</div>
+	</div>
+	<h4><a href="#"><img src="images/webchat.png"></a></h4>
+	<p>智联教育服务号</p>
+</div>
+<!--header-->
+<div class="headerWrap">
+	<div class="header w990 cleafix">
+		<!--logo-->
+		<div class="logo fl"><a href="#"><img src="images/logo.png"></a></div>
+		<!--search-->
+		<div class="hea-r fr">
+			<div class="search">
+				<div class="nav_bbs" id="nav">
+					<p class="set">课程</p>
+					<ul class="new">
+						<li>课程1</li>
+						<li>课程2</li>
+						<li>课程3</li>
+					</ul>
+				</div>
+				<input onClick="test1()"  onblur="test2()" type="text" id="test" class="search_text" value="雅思刷分季" />
+				<input type="button" value=" " class="search_sub" />
+			</div>
+			<i><em>课程咨询热线：</em><b>400-115-6660</b></i>
+		</div>
+	</div>
+</div>
+<!--nav-->
+<div class="navWrap">
+	<div class="nav w990 cleafix">
+		<!--左侧导航-->
+		<div class="nav-left fl">
+			<h2>全部课程</h2>
+		</div>
+		<ol>
+			<li>
+				<h3>云课堂</h3>
+				<p class="cleafix">
+					<a href="#">心想事呈职业化</a>
+					<a href="#">销售宝</a>
+					<a href="#" style="margin-right: 0;">经理荟</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">人力资源</a>
+					<a href="#">IT+互联网</a>
+					<a href="#" style="margin-right: 0;">管理技能</a>
+				</p>
+			</li>
+			<li>
+				<h3>HRTP</h3>
+				<p class="cleafix">
+					<a href="#">绩效薪酬管理师</a>
+					<a href="#" style="margin-right: 0;">企业内训经理</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">人才测评师</a>
+					<a href="#">人力资源经理</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">劳动争议预防调解师</a>
+				</p>
+			</li>
+			<li>
+				<h3>智选课堂</h3>
+				<p class="cleafix">
+					<a href="#">卓越管理</a>
+					<a href="#" style="margin-right: 0;">心想事呈职业化</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">精品课程</a>
+					<a href="#">人力资源</a>
+				</p>
+			</li>
+    
+			<li style="border: none;">
+				<h3>内训精品课</h3>
+				<p class="cleafix">
+					<a href="#">团队效能</a>
+					<a href="#">心想事呈职业化</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">人力资源</a>
+				</p>
+			</li>
+		</ol>
+		
+		<ul>
+			<li><a href="#" class="cur">首页<i></i></a></li>
+			<li><a href="#">云课堂<i></i></a></li>
+			<li><a href="#">HRTP<i></i></a></li>
+			<li><a href="#">智选课堂<i></i></a></li>
+			<li><a href="#">企业内训<i></i></a></li>
+			<li><a href="#">智汇导师<i></i></a></li>
+			<li><a href="#">关于我们<i></i></a></li>
+		</ul>
+	</div>
+</div>
+<!--banner-->
+<div id="slideBox" class="banner">
+	<div class="hd">
+		<ul>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<div class="bd">
+		<ul>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+		</ul>
+	</div>
+	<script type="text/javascript">
+	jQuery(".banner").slide({mainCell:".bd ul",autoPlay:true,trigger:"click"});
+	</script>
+</div>
+<!--页面主体部分-->
+<div class="mainWrap">
+	<div class="goods cleafix">
+		<!--精品课程-->
+		<div class="good-l fl">
+			<h2>精品课程</h2><p></p>
+			<div id="slideBox" class="goodl-slide">
+				<div class="bd">
+					<ul>
+						<li><a href="#"><img src="images/slide.jpg"></a><h3>《职场影响力》  老师名字</h3></li>
+						<li><a href="#"><img src="images/slide.jpg"></a><h3>《职场影响力》  老师名字1</h3></li>
+						<li><a href="#"><img src="images/slide.jpg"></a><h3>《职场影响力》  老师名字2</h3></li>
+					</ul>
+				</div>
+	
+				<!-- 左右切换按钮 -->
+				<a class="prev" href="javascript:void(0)"></a>
+				<a class="next" href="javascript:void(0)"></a>
+				<script type="text/javascript">
+					jQuery(".goodl-slide").slide({mainCell:".bd ul",autoPlay:true});
+				</script>
+			</div>
+		</div>
+		<!--智联教育动态-->
+		<div class="good-c fl">
+			<h2>智联教育动态</h2><p></p>
+			<ul>
+				<li><a href="#">员工培训积极性不高？你应该这样做！</a></li>
+				<li><a href="#">如何向培训要效益？</a></li>
+				<li><a href="#">智享课程——本周新上线课程</a></li>
+				<li><a href="#">强大的功能，你懂用吗？</a></li>
+				<li><a href="#">智联教育有什么样的课程优势？</a></li>
+			</ul>
+		</div>
+		<!--我们帮助企业解决的问题-->
+		<div class="good-r fl">
+			<h2>我们帮助企业解决的问题</h2><p></p>
+			<ul class="cleafix">
+				<li><a href="#" class="cur1">加强专业技能</a></li>
+				<li><a href="#" class="cur2">减少员工流失率</a></li>
+				<li><a href="#" class="cur2">团队协作能力</a></li>
+				<li><a href="#" class="cur1">中高层领导培养</a></li>
+				<li><a href="#" class="cur1">跨部门合作</a></li>
+				<li><a href="#" class="cur2">销售团队打造</a></li>
+			</ul>
+		</div>
+	</div>
+	<!--智联云课堂-->
+	<div class="classroom">
+		<div class="class-title cleafix">
+			<div class="classt-r fl">
+				<h2>智联云课堂</h2>
+				<em>最新课程：</em>
+				<!--文字滚动-->
+				<div class="txtScroll-top" id="textscroll">
+					<div class="bd">
+						<ul class="infoList">
+							<li><a href="#"><span>上海《企业内训经理》12月19日</span><span>南京《人力资源经理》12月19日</span></a></li>
+							<li><a href="#"><span>上海《企业内训经理》12月19日</span><span>南京《人力资源经理》12月19日</span></a></li>
+						</ul>
+					</div>
+					<script type="text/javascript">
+					jQuery(".txtScroll-top").slide({mainCell:".bd ul",autoPage:true,effect:"topLoop",autoPlay:true,vis:1,interTime:1500})
+					</script>
+				</div>
+				<h3><a href="#">更多<b>›</b></a></h3>
+			</div>
+			
+		</div>
+		<div class="class-bom cleafix">
+			<div class="clab-l fl">
+				<a href="#"><img src="images/index-img.jpg"></a>
+				<div class="Img-yy">
+					<h2>雅思刷分季</h2>
+					<p>在不刷分就到面年啦</p>
+				</div>
+			</div>
+			<div class="clab-r fl">
+				<ul class="Img-list cleafix">
+					<li>
+						<a href="#">
+							<img src="images/index-img1.jpg">
+							<h3>企业绩效管理体系建立的流程</h3>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<img src="images/index-img2.jpg">
+							<h3>企业绩效管理体系建立的流程</h3>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<img src="images/index-img1.jpg">
+							<h3>企业绩效管理体系建立的流程</h3>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<img src="images/index-img1.jpg">
+							<h3>企业绩效管理体系建立的流程</h3>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<img src="images/index-img2.jpg">
+							<h3>企业绩效管理体系建立的流程</h3>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<img src="images/index-img1.jpg">
+							<h3>企业绩效管理体系建立的流程</h3>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!--广告-->
+	<div class="adverWrap">
+		<div class="adver w990"><a href="#"><img src="images/index-adver.jpg"></a></div>
+	</div>
+	<!--ＨＲＴＰ-->
+	<div class="classroom">
+		<div class="class-title cleafix">
+			<div class="classt-r fl">
+				<h2>HRTP</h2>
+				<em>最新开班通知：</em>
+				<!--文字滚动-->
+				<div class="txtScroll-top1" id="textscroll">
+					<div class="bd">
+						<ul class="infoList">
+							<li><a href="#"><span>上海《企业内训经理》12月19日</span><span>南京《人力资源经理》12月19日</span></a></li>
+							<li><a href="#"><span>上海《企业内训经理》12月19日</span><span>南京《人力资源经理》12月19日</span></a></li>
+						</ul>
+					</div>
+					<script type="text/javascript">
+					jQuery(".txtScroll-top1").slide({mainCell:".bd ul",autoPage:true,effect:"topLoop",autoPlay:true,vis:1,interTime:1500})
+					</script>
+				</div>
+				<h3><a href="#">更多<b>›</b></a></h3>
+			</div>
+			
+		</div>
+		<div class="class-bom cleafix">
+			<ul class="Img-list1 fl">
+				<li>
+					<a href="#"><img src="images/index-img3.jpg"></a>
+					<h2>人力资源经理</h2>
+					<h3>“HR技能全解密”</h3>
+				</li>
+				<li>
+					<a href="#"><img src="images/index-img4.jpg"></a>
+					<h2>人才测评师</h2>
+					<h3>“识人用人的火眼金睛”</h3>
+				</li>
+				<li>
+					<a href="#"><img src="images/index-img5.jpg"></a>
+					<h2>企业内训经理</h2>
+					<h3>"企业智慧传承的火炬手"</h3>
+				</li>
+				<li>
+					<a href="#"><img src="images/index-img6.jpg"></a>
+					<h2>绩效薪酬管理师</h2>
+					<h3>“付其薪，得其心”</h3>
+				</li>
+				<li style="margin-right: 0;float: right;">
+					<a href="#"><img src="images/index-img7.jpg"></a>
+					<h2>劳动争议预防调节师</h2>
+					<h3>“和谐团队的润滑剂”</h3>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!--智选课堂-->
+	<div class="classroom">
+		<div class="class-title cleafix">
+			<div class="classt-r fl">
+				<h2>智选课堂</h2>
+				<em>最新开班通知：</em>
+				<!--文字滚动-->
+				<div class="txtScroll-top2" id="textscroll">
+					<div class="bd">
+						<ul class="infoList">
+							<li><a href="#"><span>上海《企业内训经理》12月19日</span><span>南京《人力资源经理》12月19日</span></a></li>
+							<li><a href="#"><span>上海《企业内训经理》12月19日</span><span>南京《人力资源经理》12月19日</span></a></li>
+						</ul>
+					</div>
+					<script type="text/javascript">
+					jQuery(".txtScroll-top2").slide({mainCell:".bd ul",autoPage:true,effect:"topLoop",autoPlay:true,vis:1,interTime:1500})
+					</script>
+				</div>
+				<h3><a href="#">更多<b>›</b></a></h3>
+			</div>
+		</div>
+		<div class="class-bom cleafix">
+			<div class="clroom-l fl">
+				<h2><span>智选课堂是什么？</span></h2>
+				<div class="wisdom cleafix">
+					<a href="#"><img src="images/index-img8.jpg"></a>
+					<p>面对越发丰富的培训课程产品，企业的选择却更加困难：内训价格昂贵，公开课种类繁多，培训质量良莠不齐。针对这些状况，智联教育在广泛市场调研的基础上，聚焦企业普遍关心的管理困惑与人才培养等问题，推出面向各级管理者和职员的年度公开课 —— 智选课堂！企业可根据自身的培训需求，灵活地选择课程主题和时间参加学习。</p>
+				</div>
+			</div>
+			<div class="clroom-r fr">
+				<h2>智选追踪</h2>
+				<ul class="Txt-list">
+					<li><a href="#">智选课堂杭州站学员现场分</a></li>
+					<li><a href="#">智选课堂杭州站学员现场分享现场</a></li>
+					<li><a href="#">智选课堂杭州站学员现场分享</a></li>
+					<li><a href="#">智选课堂杭州站学员</a></li>
+					<li><a href="#">智选课堂杭州站学员现场分</a></li>
+				</ul>
+				<ul class="Img-list2 cleafix">
+					<li>
+						<a href="#"><img src="images/index-img9.jpg"></a>
+						<span>成都</span>
+					</li>
+					<li>
+						<a href="#"><img src="images/index-img10.jpg"></a>
+						<span>杭州</span>
+					</li>
+					<li>
+						<a href="#"><img src="images/index-img11.jpg"></a>
+						<span>郑州</span>
+					</li>
+					<li style="margin-right: 0;float: right;">
+						<a href="#"><img src="images/index-img12.jpg"></a>
+						<span>济南</span>
+					</li>
+					<li>
+						<a href="#"><img src="images/index-img9.jpg"></a>
+						<p>沈阳</p>
+					</li>
+					<li>
+						<a href="#"><img src="images/index-img9.jpg"></a>
+						<p>哈尔滨</p>
+					</li>
+					<li>
+						<a href="#"><img src="images/index-img9.jpg"></a>
+						<p>青岛</p>
+					</li>
+					<li style="margin-right: 0;float: right;">
+						<a href="#"><img src="images/index-img9.jpg"></a>
+						<p>长沙</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!--广告-->
+	<div class="adverWrap">
+		<div class="adver w990"><a href="#"><img src="images/index-adver1.jpg"></a></div>
+	</div>
+	<!--智汇导师-->
+	<div class="classroom">
+		<div class="class-title cleafix">
+			<div class="classt-r fl">
+				<h2>智汇导师</h2>
+			</div>
+		</div>
+		<div class="wonder">
+			<div class="hd">
+				<a class="next"></a>
+				<a class="prev"></a>
+			</div>
+			<div class="bd">
+				<ul class="picList cleafix">
+					<li>
+						<div class="pic-img">
+							<a href="#"><img src="images/index-img13.jpg" /></a>
+							<p>Mabel</p>
+							<div class="shaow">
+								<h3>Mabel</h3>
+								<h4>介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍</h4>
+								<a href="#">了解更多<b>›</b></a>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="pic-img">
+							<a href="#"><img src="images/index-img14.jpg" /></a>
+							<p>Mabel</p>
+							<div class="shaow">
+								<h3>Mabel</h3>
+								<h4>介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍</h4>
+								<a href="#">了解更多<b>›</b></a>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="pic-img">
+							<a href="#"><img src="images/index-img15.jpg" /></a>
+							<p>Mabel</p>
+							<div class="shaow">
+								<h3>Mabel</h3>
+								<h4>介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍</h4>
+								<a href="#">了解更多<b>›</b></a>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="pic-img">
+							<a href="#"><img src="images/index-img14.jpg" /></a>
+							<p>Mabel</p>
+							<div class="shaow">
+								<h3>Mabel</h3>
+								<h4>介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍</h4>
+								<a href="#">了解更多<b>›</b></a>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="pic-img">
+							<a href="#"><img src="images/index-img13.jpg" /></a>
+							<p>Mabel</p>
+							<div class="shaow">
+								<h3>Mabel</h3>
+								<h4>介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍</h4>
+								<a href="#">了解更多<b>›</b></a>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="pic-img">
+							<a href="#"><img src="images/index-img13.jpg" /></a>
+							<p>Mabel</p>
+							<div class="shaow">
+								<h3>Mabel</h3>
+								<h4>介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍</h4>
+								<a href="#">了解更多<b>›</b></a>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="pic-img">
+							<a href="#"><img src="images/index-img14.jpg" /></a>
+							<p>Mabel</p>
+							<div class="shaow">
+								<h3>Mabel</h3>
+								<h4>介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍</h4>
+								<a href="#">了解更多<b>›</b></a>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="pic-img">
+							<a href="#"><img src="images/index-img15.jpg" /></a>
+							<p>Mabel</p>
+							<div class="shaow">
+								<h3>Mabel</h3>
+								<h4>介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍</h4>
+								<a href="#">了解更多<b>›</b></a>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="pic-img">
+							<a href="#"><img src="images/index-img14.jpg" /></a>
+							<p>Mabel</p>
+							<div class="shaow">
+								<h3>Mabel</h3>
+								<h4>介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍</h4>
+								<a href="#">了解更多<b>›</b></a>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="pic-img">
+							<a href="#"><img src="images/index-img13.jpg" /></a>
+							<p>Mabel</p>
+							<div class="shaow">
+								<h3>Mabel</h3>
+								<h4>介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍</h4>
+								<a href="#">了解更多<b>›</b></a>
+							</div>
+						</div>
+					</li>
+					
+				</ul>
+				<script type="text/javascript">
+					$(".picList .pic-img").hover(function(){
+						//鼠标滑上去
+						$(this).find(".shaow").animate({"bottom":"0px"},300);
+						$(this).find("p").hide();
+						
+				
+					},function(){
+						//鼠标移开之后
+						$(this).find(".shaow").animate({"bottom":"-96px"},300);
+						$(this).find("p").fadeIn(1000);
+					});
+				</script>
+			</div>
+			<script type="text/javascript">
+			jQuery(".wonder").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"left",autoPlay:true,vis:5,pnLoop:false});
+			</script>
+		</div>
+	</div>	
+	<!--合作机构-->
+	<div class="classroom">
+		<div class="class-title cleafix">
+			<div class="classt-r fl">
+				<h2>合作机构</h2>
+			</div>
+		</div>
+		<div class="room-list cleafix">
+			<ul class="page1">
+		 		<li>
+			 		<a href="#">
+			 			<div class="pic">
+			 				<div class="pic_t"><img src="images/index-pic18.jpg"></div>	
+				 		</div>
+			 		</a>
+		 		</li>
+		 		<li>
+			 		<a href="#">
+			 			<div class="pic">
+			 				<div class="pic_t"><img src="images/index-pic19.jpg"></div>	
+				 		</div>
+			 		</a>
+		 		</li>
+		 		<li>
+			 		<a href="#">
+			 			<div class="pic">
+			 				<div class="pic_t"><img src="images/index-pic18.jpg"></div>	
+				 		</div>
+			 		</a>
+		 		</li>
+		 		<li>
+			 		<a href="#">
+			 			<div class="pic">
+			 				<div class="pic_t"><img src="images/index-pic20.jpg"></div>	
+				 		</div>
+			 		</a>
+		 		</li>
+		 		<li style="margin-right: 0;">
+			 		<a href="#">
+			 			<div class="pic">
+			 				<div class="pic_t"><img src="images/index-pic18.jpg"></div>	
+				 		</div>
+			 		</a>
+		 		</li>		 		
+		 	</ul>
+		</div>
+	</div>
+</div>
+<!--footer-->
+<div class="footerWrap">
+	<div class="footer w990">
+		<div class="foo-title"><h2>我们帮助过的企业</h2></div>
+		<h1>覆盖全国<em>888</em>个城市，<em>888</em>个领域，遍布金融、通信、电力、……各行各业</h1>
+		<ul class="cleafix">
+			<li class="foo-list foo-list1">
+				<h2><img src="images/index-ico7.png">IT领域</h2>
+				<a href="#"><img src="images/index-pic1.jpg"></a>
+				<a href="#"><img src="images/index-pic6.jpg"></a>
+				<a href="#"><img src="images/index-pic11.jpg"></a>
+			</li>
+			<li class="foo-list">
+				<h2><img src="images/index-ico8.png">通信领域</h2>
+				<a href="#"><img src="images/index-pic2.jpg"></a>
+				<a href="#"><img src="images/index-pic7.jpg"></a>
+				<a href="#"><img src="images/index-pic12.jpg"></a>
+			</li>
+			<li class="foo-list">
+				<h2><img src="images/index-ico9.png">金融领域</h2>
+				<a href="#"><img src="images/index-pic3.jpg"></a>
+				<a href="#"><img src="images/index-pic8.jpg"></a>
+				<a href="#"><img src="images/index-pic13.jpg"></a>
+			</li>
+			<li class="foo-list">
+				<h2><img src="images/index-ico10.png">快消领域</h2>
+				<a href="#"><img src="images/index-pic4.jpg"></a>
+				<a href="#"><img src="images/index-pic9.jpg"></a>
+				<a href="#"><img src="images/index-pic14.jpg"></a>
+			</li>
+			<li class="foo-list">
+				<h2><img src="images/index-ico11.png">地产领域</h2>
+				<a href="#"><img src="images/index-pic5.jpg"></a>
+				<a href="#"><img src="images/index-pic10.jpg"></a>
+				<a href="#"><img src="images/index-pic15.jpg"></a>
+			</li>
+			<li class="foo-list foo-list2">
+				<h2 style="float: right;"><img src="images/index-ico12.png">汽车领域</h2>
+				<a href="#"><img src="images/index-pic16.jpg"></a>
+				<a href="#"><img src="images/index-pic17.jpg"></a>
+				<a href="#"><img src="images/index-pic21.jpg"></a>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="footWrap">
+	<p>
+		<a href="#">智联介绍</a><span>|</span>
+		<a href="#">网站地图</a><span>|</span>
+		<a href="#">加入智联</a><span>|</span>
+		<a href="#">法律声明</a><span>|</span>
+		<a href="#">保密承诺</a><span>|</span>
+		<a href="#">联系方式</a><span>|</span>
+		<a href="#">常见问题</a><span>|</span>
+		<a href="#">Investor Relations</a>
+		您对 Zhaopin.com 有任何建议或意见请
+		<a herf="#">联系我们</a>
+	</p>
+	<p>未经zhaopin.com 同意，不得转载本网站之所有招聘信息及作品 智联招聘网版权所有© 1997-2015</p>
+	<p>京ICP备12025925号 电信业务审批[2001]字第233号函 京公网安备110105000322 .</p>
+</div>
+</body>
+</html>

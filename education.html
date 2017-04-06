@@ -1,0 +1,645 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>智联教育(HRTP)</title>
+<link rel="stylesheet" href="css/default.css" />
+<link rel="stylesheet" href="css/index.css" />
+<script type="text/javascript" src="js/jquery.js" ></script>
+<script type="text/javascript" src="js/index.js" ></script>
+<script type="text/javascript" src="js/jquery.superslide.2.1.1.js" ></script>
+<script type="text/javascript">
+jQuery.fn.float= function(settings){
+	if(typeof settings == "object"){
+		settings = jQuery.extend({
+			//延迟
+			delay : 1000,
+			//位置偏移
+			offset : {
+				left : 0,
+				right : 0,
+				top : 0,
+				bottom : 0
+			},
+			style : null, //样式
+			width:147,  //宽度
+			height:429, //高度
+			position:"rm" //位置
+		}, settings || {});	
+		var winW = $(window).width();
+		var winH = $(window).height();
+		
+		 //根据参数获取位置数值
+		function getPosition($applyTo,position){
+			var _pos = null;
+			switch(position){
+				case "rm" : 
+					$applyTo.data("offset","right");
+					$applyTo.data("offsetPostion",settings.offset.right);
+					_pos = {right:settings.offset.right,top:winH/3.2-$applyTo.innerHeight()/3.2};
+				break;
+				case "lm" :
+					$applyTo.data("offset","left");
+					$applyTo.data("offsetPostion",settings.offset.left);
+					_pos = {left:settings.offset.left,top:winH/3.2-$applyTo.innerHeight()/3.2};
+				break;
+				case "rb" :
+					_pos = {right:settings.offset.right,top:winH - $applyTo.innerHeight()};
+				break;
+				case "lb" :
+					_pos = {left:settings.offset.left,top:winH - $applyTo.innerHeight()};
+				break;
+				case "l" : 
+					_pos = {left:settings.offset.left,top:settings.offset.top};
+				break;
+				case "r" : 
+					_pos = {right:settings.offset.right,top:settings.offset.top};
+				break;				
+				case "t" :
+					$applyTo.data("offset","top");
+					$applyTo.data("offsetPostion",settings.offset.top);					
+					_pos = {left:settings.offset.left,top:settings.offset.top};
+				break;
+				case "b" :
+					$applyTo.data("offset","bottom");
+					$applyTo.data("offsetPostion",settings.offset.bottom);					
+					_pos = {left:settings.offset.left,top:winH - $applyTo.innerHeight()};				
+				break;
+			}
+			return _pos;
+		}
+		//设置容器位置
+		function setPosition($applyTo,position,isUseAnimate){
+			var scrollTop = $(window).scrollTop();
+			var scrollLeft = $(window).scrollLeft();
+			var _pos = getPosition($applyTo,position);
+			_pos.top += scrollTop;
+			isUseAnimate && $applyTo.stop().animate(_pos,settings.delay) || $applyTo.css(_pos);
+		} 
+		return this.each(function(){
+			var $this =  $(this);
+			$this.css("position","absolute");
+			settings.style && $this.css(settings.style);
+			setPosition($this,settings.position);
+			$(this).data("isAllowScroll",true);
+			$(window).scroll(function(){
+				$this.data("isAllowScroll") && setPosition($this,settings.position,true);
+			});
+		})	
+	}else{
+		var speed = arguments.length > 1 && arguments[1] || "fast"; 
+		this.each(function(){		   
+			if(settings == "clearOffset"){
+					var _c = {};
+					if($(this).data("offset")){
+						 _c[$(this).data("offset")] = 0; 
+						 $(this).data("isAllowScroll",false);
+						 $(this).stop().animate(_c,speed);
+					}
+			}else if(settings == "addOffset"){
+					var _c = {};
+					if($(this).data("offset") && $(this).data("offsetPostion")){
+						 _c[$(this).data("offset")] = $(this).data("offsetPostion"); 
+						 $(this).stop().animate(_c,speed);
+						 $(this).data("isAllowScroll",true);
+					}
+									   
+			}else if(settings == "setScrollDisable"){
+				$(this).data("isAllowScroll",false);
+			}else if(settings == "setScrollUsable"){
+				$(this).data("isAllowScroll",true);	
+			}
+		})
+	}
+}
+</script>
+<script type="text/javascript">
+$(function(){
+	$(".customer").float({
+		delay : 500,//延迟
+		position:"rm" //位置
+	});
+});
+</script>
+</head>
+<body>
+<!--右侧浮动层-->
+<div class="customer">
+	<ul>
+		<li><a href="#">您遇到什么问题？</a></li>
+		<li><a href="#">企业内训需求</a></li>
+		<li><a href="#">企业员工培训</a></li>
+		<li><a href="#">专业岗位证书</a></li>
+	</ul>
+	<h2><a href="#"><img src="images/edu-ico13.png"> 企业内训定制</a></h2>
+	<div class="lineWrap">
+		<div class="line">
+			<i></i>
+			<h3>在线客服</h3>
+			<input type="button" value="马上咨询" />
+		</div>
+	</div>
+	<h4><a href="#"><img src="images/webchat.png"></a></h4>
+	<p>智联教育服务号</p>
+</div>
+<!--header-->
+<div class="headerWrap">
+	<div class="header w990 cleafix">
+		<!--logo-->
+		<div class="logo fl"><a href="#"><img src="images/logo.png"></a></div>
+		<!--search-->
+		<div class="hea-r fr">
+			<div class="search">
+				<div class="nav_bbs" id="nav">
+					<p class="set">课程</p>
+					<ul class="new">
+						<li>课程1</li>
+						<li>课程2</li>
+						<li>课程3</li>
+					</ul>
+				</div>
+				<input onClick="test1()"  onblur="test2()" type="text" id="test" class="search_text" value="雅思刷分季" />
+				<input type="button" value=" " class="search_sub" />
+			</div>
+			<i><em>课程咨询热线：</em><b>400-115-6660</b></i>
+		</div>
+	</div>
+</div>
+<!--nav-->
+<div class="navWrap">
+	<div class="nav w990 cleafix">
+		<!--左侧导航-->
+		<div id="nav-left" class="nav-left fl">
+			<h2>全部课程<i></i></h2>
+		</div>
+		<ol id="navol">
+			<li>
+				<h3>云课堂</h3>
+				<p class="cleafix">
+					<a href="#">心想事呈职业化</a>
+					<a href="#">销售宝</a>
+					<a href="#" style="margin-right: 0;">经理荟</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">人力资源</a>
+					<a href="#">IT+互联网</a>
+					<a href="#" style="margin-right: 0;">管理技能</a>
+				</p>
+			</li>
+			<li>
+				<h3>HRTP</h3>
+				<p class="cleafix">
+					<a href="#">绩效薪酬管理师</a>
+					<a href="#" style="margin-right: 0;">企业内训经理</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">人才测评师</a>
+					<a href="#">人力资源经理</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">劳动争议预防调解师</a>
+				</p>
+			</li>
+			<li>
+				<h3>智选课堂</h3>
+				<p class="cleafix">
+					<a href="#">卓越管理</a>
+					<a href="#" style="margin-right: 0;">心想事呈职业化</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">精品课程</a>
+					<a href="#">人力资源</a>
+				</p>
+			</li>
+    
+			<li style="border: none;">
+				<h3>内训精品课</h3>
+				<p class="cleafix">
+					<a href="#">团队效能</a>
+					<a href="#">心想事呈职业化</a>
+				</p>
+				<p class="cleafix">
+					<a href="#">人力资源</a>
+				</p>
+			</li>
+		</ol>
+		<ul>
+			<li><a href="#" class="cur">首页<i></i></a></li>
+			<li><a href="#">云课堂<i></i></a></li>
+			<li><a href="#">HRTP<i></i></a></li>
+			<li><a href="#">智选课堂<i></i></a></li>
+			<li><a href="#">企业内训<i></i></a></li>
+			<li><a href="#">智汇导师<i></i></a></li>
+			<li><a href="#">关于我们<i></i></a></li>
+		</ul>
+	</div>
+</div>
+<!--banner-->
+<div id="slideBox" class="banner">
+	<div class="hd">
+		<ul>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<div class="bd">
+		<ul>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+			<li><a href="#"><img src="images/banner.jpg"></a></li>
+		</ul>
+	</div>
+	<script type="text/javascript">
+	jQuery(".banner").slide({mainCell:".bd ul",autoPlay:true,trigger:"click"});
+	</script>
+</div>
+<!--页面主体部分-->
+<div class="mainWrap mainWrap1">
+	<!--HRTP是什么-->
+	<div class="hrtpWrap">
+		<div class="hrtp w990 cleafix">
+			<div class="hrtp-l fl"><img src="images/edu-pic1.png"></div>
+			<div class="hrtp-r fr">
+				<h2>HRTP是什么？</h2>
+				<p>HRTP系列课程致力于解决人力资源“全、选、育、用、留”等核心模块的关键问题。是智联教育基于多年的人力资源服务和培训实践，与人力资源和社会保障部强强联合，精心打造的兼顾HR系统性和实用性的课程体系。</p>
+			</div>
+			<div class="hrtp-Txt"><p>我们已在全国近<em>20余座城市</em>开设了百余期课程，累计培训<em>上万人次</em>，在人力资源培训领域获得了一致好评，</p><p>是<em>广大企业和HR</em>从业者自身培训和发展的<em>最佳选择。</em></p></div>
+		</div>
+	</div>
+	<!--选择HRTP的理由-->
+	<div class="reasonWrap">
+		<div class="reason w990">
+			<div class="rea-title"><h2>选择HRTP的理由</h2></div>
+			<div class="rea-bom">
+				<ul class="reab-list cleafix">
+					<li>
+						<div class="rea-Img"><img src="images/edu-pic2.png"></div>
+						<h2>权威认证</h2>
+						<a href="#">人社部的权威认证，证书技术一步搞定，依托大数据资源并整合专业分析，深入研究人力资源实战经验和热点趋势</a>
+					</li>
+					<li>
+						<div class="rea-Img"><img src="images/edu-pic3.png"></div>
+						<h2>系统实战</h2>
+						<a href="#">关注个人专业能力及职业发展路径，名企资深顾问和专家指点迷津，全面提供系统资料和工作方法包</a>
+					</li>
+					<li>
+						<div class="rea-Img"><img src="images/edu-pic4.png"></div>
+						<h2>便捷高效</h2>
+						<a href="#">O2O的授课模式，大幅提升学习效率，兼顾岗位需求和个人能力需求设计课程，全面系统的教学支持和服务流程</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!--HRTP的核心模块-->
+	<div class="reasonWrap reasonWrap1">
+		<div class="reason w990">
+			<div class="rea-title"><h3>HRTP的核心模块</h3></div>
+			<div class="rea-bom">
+				<ul class="core cleafix">
+					<li class="core-li core-li1">
+						<div class="coreli-Img"><img src="images/edu-ico1.png"></div>
+						<h2>人力资源经理</h2>
+						<h3>“HR技能全解密”</h3>
+						<a href="#">查看详情<b>></b></a>
+						<i class="ico"><img src="images/edu-ico6.png"></i>
+					</li>
+					<li class="core-li">
+						<div class="coreli-Img1">
+							<img src="images/edu-img1.jpg">
+						</div>
+					</li>
+					<li class="core-li core-li2">
+						<div class="coreli-Img"><img src="images/edu-ico2.png"></div>
+						<h2>企业内训经理</h2>
+						<h3>“企业智慧传承的火炬手”</h3>
+						<a href="#">查看详情<b>></b></a>
+						<i class="ico"><img src="images/edu-ico7.png"></i>
+					</li>
+					<li class="core-li">
+						<div class="coreli-Img1">
+							<img src="images/edu-img2.jpg">
+						</div>
+					</li>
+					<li class="core-li core-li3">
+						<div class="coreli-Img"><img src="images/edu-ico3.png"></div>
+						<h2>企业内训经理</h2>
+						<h3>“企业智慧传承的火炬手”</h3>
+						<a href="#">查看详情<b>></b></a>
+						<i class="ico"><img src="images/edu-ico8.png"></i>
+					</li>
+					<li class="core-li">
+						<div class="coreli-Img1">
+							<img src="images/edu-img3.jpg">
+						</div>
+					</li>
+					<li class="core-li core-li4">
+						<div class="coreli-Img"><img src="images/edu-ico4.png"></div>
+						<h2>企业内训经理</h2>
+						<h3>“企业智慧传承的火炬手”</h3>
+						<a href="#">查看详情<b>></b></a>
+						<i class="ico1"><img src="images/edu-ico9.png"></i>
+					</li>
+					<li class="core-li">
+						<div class="coreli-Img1">
+							<img src="images/edu-img4.jpg">
+						</div>
+					</li>
+					<li class="core-li core-li5">
+						<div class="coreli-Img"><img src="images/edu-ico5.png"></div>
+						<h2>企业内训经理</h2>
+						<h3>“企业智慧传承的火炬手”</h3>
+						<a href="#">查看详情<b>></b></a>
+						<i class="ico1"><img src="images/edu-ico10.png"></i>
+					</li>
+					<li class="core-li">
+						<div class="coreli-Img1">
+							<img src="images/edu-img5.jpg">
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!--金牌导师-->
+	<div class="reasonWrap reasonWrap1">
+		<div class="reason w990">
+			<div class="rea-title"><h3 style="background: url(images/edu-back2.png) no-repeat;">金牌导师</h3></div>
+			<div class="mentor">
+				<ul class="cleafix">
+					<li class="men-li1">
+						<div class="menli_Img fl"><a href="#"><img src="images/edu-pic5.png"></a></div>
+						<div class="menli_Txt fr">
+							<h2>罗君（智联教育）</h2>
+							<p>智联招聘教育培训负责人、香港理工大学管理学硕士、中国传媒大学特聘讲师、法国GTE公司品牌咨询总监</p>
+						</div>
+					</li>
+					<li class="men-li2">
+						<div class="menli_Img fl"><a href="#"><img src="images/edu-pic6.png"></a></div>
+						<div class="menli_Txt fr">
+							<h2>金愫（盛道咨询）</h2>
+							<p>澳大利亚昆士兰大学人力资源管理硕士；资深人力资源管理实战专家； 盛道合伙人、管理咨询项目总监；知名电子商务和零售企业高管</p>
+						</div>
+					</li>
+					<li class="men-li3">
+						<div class="menli_Img fl"><a href="#"><img src="images/edu-pic7.png"></a></div>
+						<div class="menli_Txt fr">
+							<h2>高煜东（智联学院）</h2>
+							<p>智联学院执行院长兼学习发展总监；上海财经大学经济管理硕士；资深人才测评顾问、心理咨询师；中国教育电视台《职来职往》嘉宾；</p>
+						</div>
+					</li>
+					<li class="men-li4">
+						<div class="menli_Img fl"><a href="#"><img src="images/edu-pic5.png"></a></div>
+						<div class="menli_Txt fr">
+							<h2>刘斌（智联测评）</h2>
+							<p>国家高级人才测评师；全国人才流动中心测评专家；十二年企业管理工作经验</p>
+						</div>
+					</li>
+					<li class="men-li5">
+						<div class="menli_Img fl"><a href="#"><img src="images/edu-pic5.png"></a></div>
+						<div class="menli_Txt fr">
+							<h2>刘宣徳（盛道咨询）</h2>
+							<p>资深人力资源管理实战专家；盛道合伙人、管理咨询项目总监；10年企业总经理、副总经验；国家注册管理咨询师</p>
+						</div>
+					</li>
+					<li class="men-li6">
+						<div class="menli_Img fl"><a href="#"><img src="images/edu-pic7.png"></a></div>
+						<div class="menli_Txt fr">
+							<h2>贾富春（道源君合）</h2>
+							<p>著名劳动法专家、 全国优秀劳动仲裁员、劳动法在线全国律师团首席律师、人力资源法务高级规划师专家委员会专家</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!--课程排期-->
+	<div class="courseWrap">
+		<div class="course w990">
+			<div class="course-title"><h2>课程排期</h2></div>
+			<div class="course-bom cleafix">
+				<table width="604" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<th width="111" height="38">城市</th>
+						<th width="307">时间</th>
+						<th width="182" style="border-right: 1px solid #999;">课程</th>
+					</tr>
+					<tr>
+						<td rowspan="5">北京</td>
+						<td>2016年3月26~27 日</td>
+						<td>《人才测评师》</td>
+					</tr>
+					<tr class="blue">
+						<td>2016年3月19~20日</td>
+						<td>《绩效薪酬管理师》</td>
+					</tr>
+					<tr>
+						<td>2016年4月23~24日</td>
+						<td>《人力资源经理》</td>
+					</tr>
+					<tr class="blue">
+						<td>2016年4月16~17日</td>
+						<td>《绩效薪酬管理师》</td>
+					</tr>
+					<tr>
+						<td>2016年3月05-06日</td>
+						<td>《人力资源经理》</td>
+					</tr>
+					<tr>
+						<td rowspan="2">上海</td>
+						<td class="blue">2016年4月23-24日</td>
+						<td class="blue">《绩效薪酬管理师》</td>
+					</tr>
+					<tr>
+						<td>2016年5月14~15日 / 21~22日</td>
+						<td>《人才测评师》</td>
+					</tr>
+					<tr> 
+						<td rowspan="3">南京</td>
+						<td class="blue">2016年6月25-26日</td>
+						<td class="blue">《人力资源经理》</td>
+					</tr>
+					<tr>
+						<td>2016年6月03-05日</td>
+						<td>《人力资源经理》</td>
+					</tr>
+					<tr class="blue">
+						<td>2016年6月18~19日</td>
+						<td>《企业内训经理》</td>
+					</tr>
+					<tr>
+						<td>大连</td>
+						<td>2016年1月16~17日 / 23~24日</td>
+						<td>《绩效薪酬管理师》</td>
+					</tr>
+				</table>
+				<div class="corb-r fr">
+					<h2>报名方式<i></i></h2>
+					<h3>方式1</h3>
+					<h4>报名热线：<br /><em>400-115-6660 </em></h4>
+					<h3 style="margin-top: 8px;">方式2</h3>
+					<h4>扫二维码，关注并<em>回复城市名</em>（如“上海”）即可报名参加</h4>
+					<a href="#"><img src="images/webchat.png"></a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--课程回顾-->
+	<div class="reviewWrap">
+		<div class="review w990 cleafix">
+			<div class="review-l fl"><h2>课程回顾</h2></div>
+			<div class="review-r fl">
+				<div class="hd">
+					<a class="next"></a>
+					<a class="prev"></a>
+				</div>
+				<div class="bd">
+					<ul class="picList">
+						<li>
+							<div class="pic"><a href="#"><img src="images/edu-img6.jpg" /><p>《人力资源经理》 北京</p></a></div>
+						</li>
+						<li>
+							<div class="pic"><a href="#"><img src="images/edu-img7.jpg" /><p>《人力资源经理》 南京</p></a></div>
+						</li>
+						<li>
+							<div class="pic"><a href="#"><img src="images/edu-img8.jpg" /><p>《绩效薪酬管理师》 上海</p></a></div>
+						</li>
+						<li>
+							<div class="pic"><a href="#"><img src="images/edu-img9.jpg" /><p>《绩效薪酬管理师》 大连</p></a></div>
+						</li>
+						<li>
+							<div class="pic"><a href="#"><img src="images/edu-img6.jpg" /><p>《人力资源经理》 北京</p></a></div>
+						</li>
+						<li>
+							<div class="pic"><a href="#"><img src="images/edu-img7.jpg" /><p>《人力资源经理》 南京</p></a></div>
+						</li>
+						<li>
+							<div class="pic"><a href="#"><img src="images/edu-img8.jpg" /><p>《绩效薪酬管理师》 上海</p></a></div>
+						</li>
+						<li>
+							<div class="pic"><a href="#"><img src="images/edu-img9.jpg" /><p>《绩效薪酬管理师》 大连</p></a></div>
+						</li>
+					</ul>
+				</div>
+				<script type="text/javascript">
+					jQuery(".review-r").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"left",autoPlay:true,vis:4});
+				</script>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+var imgWid = 0 ;
+var imgHei = 0 ; //变量初始化
+var big = 1.2;//放大倍数
+$(".picList li").hover(function(){
+	$(this).find("a").stop(true,true);
+	var imgWid2 = 0;var imgHei2 = 0;//局部变量
+	imgWid = $(this).find("a").width();
+	imgHei = $(this).find("a").height();
+	imgWid2 = imgWid * big;
+	imgHei2 = imgHei * big;
+	$(this).find("a").css({"z-index":2});
+	$(this).find("a").animate({"width":imgWid2,"height":imgHei2,"margin-left":-imgWid2/2,"margin-top":-imgHei2/2});
+},function(){$(this).find("a").stop().animate({"width":imgWid,"height":imgHei,"margin-left":-imgWid/2,"margin-top":-imgHei/2,"z-index":1});});
+})
+</script>
+
+
+
+<script type="text/javascript">
+
+var $slider = $('.slider ul');
+var $slider_child_l = $('.slider ul li').length;
+var $slider_width = $('.slider ul li').width();
+$slider.width($slider_child_l * $slider_width);
+
+var slider_count = 0;
+
+if ($slider_child_l < 6) {
+	$('#btn-right').css({cursor: 'auto'});
+	$('#btn-right').removeClass("dasabled");
+}
+
+$('#btn-right').click(function() {
+	if ($slider_child_l < 6 || slider_count >= $slider_child_l - 6) {
+		return false;
+	}
+	
+	slider_count++;
+	$slider.animate({left: '-=' + $slider_width + 'px'}, 'slow');
+	slider_pic();
+});
+
+$('#btn-left').click(function() {
+	if (slider_count <= 0) {
+		return false;
+	}
+	
+	slider_count--;
+	$slider.animate({left: '+=' + $slider_width + 'px'}, 'slow');
+	slider_pic();
+});
+
+function slider_pic() {
+	if (slider_count >= $slider_child_l - 6) {
+		$('#btn-right').css({cursor: 'auto'});
+//		$('#btn-right').addClass("dasabled");
+	}
+	else if (slider_count > 0 && slider_count <= $slider_child_l - 6) {
+		$('#btn-left').css({cursor: 'pointer'});
+//		$('#btn-left').removeClass("dasabled");
+		$('#btn-right').css({cursor: 'pointer'});
+//		$('#btn-right').removeClass("dasabled");
+	}
+	else if (slider_count <= 0) {
+		$('#btn-left').css({cursor: 'auto'});
+//		$('#btn-left').addClass("dasabled");
+	}
+}
+
+$('.slider').hover(function() {
+	if ($(this).find('li:animated').length) return;
+	$(this).animate({marginTop: '-18px'}, 300);
+	$(this).animate({marginLeft: '-14px'}, 300);
+	$(this).find('li').animate({width: '234px'});
+	$(this).find('li').animate({height: '185px'});
+}, function() {
+	
+	$(this).animate({marginTop: '0px'}, 200);
+	$(this).animate({marginLeft: '0px'}, 200);
+	$(this).find('li').animate({width: '198px'});
+	$(this).find('li').animate({height: '157px'});
+});
+
+</script>
+<!--footer-->
+<div class="footWrap">
+	<p>
+		<a href="#">智联介绍</a><span>|</span>
+		<a href="#">网站地图</a><span>|</span>
+		<a href="#">加入智联</a><span>|</span>
+		<a href="#">法律声明</a><span>|</span>
+		<a href="#">保密承诺</a><span>|</span>
+		<a href="#">联系方式</a><span>|</span>
+		<a href="#">常见问题</a><span>|</span>
+		<a href="#">Investor Relations</a>
+		您对 Zhaopin.com 有任何建议或意见请
+		<a herf="#">联系我们</a>
+	</p>
+	<p>未经zhaopin.com 同意，不得转载本网站之所有招聘信息及作品 智联招聘网版权所有© 1997-2015</p>
+	<p>京ICP备12025925号 电信业务审批[2001]字第233号函 京公网安备110105000322 .</p>
+</div>
+</body>
+</html>
